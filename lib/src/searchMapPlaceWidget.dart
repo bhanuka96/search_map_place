@@ -3,6 +3,7 @@ part of search_map_place;
 class SearchMapPlaceWidget extends StatefulWidget {
   SearchMapPlaceWidget({
     @required this.apiKey,
+    @required this.textEditingController,
     this.placeholder = 'Search',
     this.icon = Icons.search,
     this.hasClearButton = true,
@@ -71,13 +72,15 @@ class SearchMapPlaceWidget extends StatefulWidget {
 
   /// Enables Dark Mode when set to `true`. Default value is `false`.
   final bool darkMode;
+  
+  final TextEditingController textEditingController;
 
   @override
   _SearchMapPlaceWidgetState createState() => _SearchMapPlaceWidgetState();
 }
 
 class _SearchMapPlaceWidgetState extends State<SearchMapPlaceWidget> with TickerProviderStateMixin {
-  TextEditingController _textEditingController = TextEditingController();
+//  TextEditingController widget.textEditingController = TextEditingController();
   AnimationController _animationController;
   // SearchContainer height.
   Animation _containerHeight;
@@ -115,7 +118,7 @@ class _SearchMapPlaceWidgetState extends State<SearchMapPlaceWidget> with Ticker
       ),
     );
 
-    _textEditingController.addListener(_autocompletePlace);
+    widget.textEditingController.addListener(_autocompletePlace);
     customListener();
 
     if (widget.hasClearButton) {
@@ -180,7 +183,7 @@ class _SearchMapPlaceWidgetState extends State<SearchMapPlaceWidget> with Ticker
           Expanded(
             child: TextField(
               decoration: _inputStyle(),
-              controller: _textEditingController,
+              controller: widget.textEditingController,
               onSubmitted: (_) => _selectPlace(),
               onEditingComplete: _selectPlace,
               autofocus: false,
@@ -195,7 +198,7 @@ class _SearchMapPlaceWidgetState extends State<SearchMapPlaceWidget> with Ticker
           if (widget.hasClearButton)
             GestureDetector(
               onTap: () {
-                if (_crossFadeState == CrossFadeState.showSecond) _textEditingController.clear();
+                if (_crossFadeState == CrossFadeState.showSecond) widget.textEditingController.clear();
               },
               // child: Icon(_inputIcon, color: this.widget.iconColor),
               child: AnimatedCrossFade(
@@ -265,15 +268,15 @@ class _SearchMapPlaceWidgetState extends State<SearchMapPlaceWidget> with Ticker
   void _autocompletePlace() async {
     if (_fn.hasFocus) {
       setState(() {
-        _currentInput = _textEditingController.text;
+        _currentInput = widget.textEditingController.text;
         _isEditing = true;
       });
 
-      _textEditingController.removeListener(_autocompletePlace);
+      widget.textEditingController.removeListener(_autocompletePlace);
 
       if (_currentInput.length == 0) {
         if (!_containerHeight.isDismissed) _closeSearch();
-        _textEditingController.addListener(_autocompletePlace);
+        widget.textEditingController.addListener(_autocompletePlace);
         return;
       }
 
@@ -283,12 +286,12 @@ class _SearchMapPlaceWidgetState extends State<SearchMapPlaceWidget> with Ticker
         setState(() => _placePredictions = predictions);
         await _animationController.forward();
 
-        _textEditingController.addListener(_autocompletePlace);
+        widget.textEditingController.addListener(_autocompletePlace);
         return;
       }
 
       Future.delayed(Duration(milliseconds: 500), () {
-        _textEditingController.addListener(_autocompletePlace);
+        widget.textEditingController.addListener(_autocompletePlace);
         if (_isEditing == true) _autocompletePlace();
       });
     }
@@ -325,7 +328,7 @@ class _SearchMapPlaceWidgetState extends State<SearchMapPlaceWidget> with Ticker
   /// Will be called when a user selects one of the Place options
   void _selectPlace({Place prediction}) async {
     if (prediction != null) {
-      _textEditingController.value = TextEditingValue(
+      widget.textEditingController.value = TextEditingValue(
         text: prediction.description,
         selection: TextSelection.collapsed(
           offset: prediction.description.length,
@@ -351,13 +354,13 @@ class _SearchMapPlaceWidgetState extends State<SearchMapPlaceWidget> with Ticker
       _isEditing = false;
     });
     _animationController.reverse();
-    _textEditingController.addListener(_autocompletePlace);
+    widget.textEditingController.addListener(_autocompletePlace);
   }
 
   /// Will listen for input changes every 0.5 seconds, allowing us to make API requests only when the user stops typing.
   void customListener() {
     Future.delayed(Duration(milliseconds: 500), () {
-      setState(() => _tempInput = _textEditingController.text);
+      setState(() => _tempInput = widget.textEditingController.text);
       customListener();
     });
   }
@@ -365,7 +368,7 @@ class _SearchMapPlaceWidgetState extends State<SearchMapPlaceWidget> with Ticker
   @override
   void dispose() {
     _animationController.dispose();
-    _textEditingController.dispose();
+    widget.textEditingController.dispose();
     _fn.dispose();
     super.dispose();
   }
