@@ -2,16 +2,22 @@ part of search_map_place;
 
 class Geolocation {
   Geolocation(this._coordinates, this._bounds);
-
+  bool foundLocality = false;
   Geolocation.fromJSON(geolocationJSON) {
     this._coordinates = geolocationJSON["results"][0]["geometry"]["location"];
     this._bounds = geolocationJSON["results"][0]["geometry"]["viewport"];
     this.fullJSON = geolocationJSON["results"][0];
+
     geolocationJSON['results'].forEach((value){
       value['address_components'].forEach((address){
         address['types'].forEach((type){
-          if(type == 'administrative_area_level_3'){
-            this.cityComponent =address;
+          if(type == 'locality'){
+            this.cityComponent = address;
+            foundLocality = true;
+          }else{
+            if(type == 'administrative_area_level_3' && !foundLocality){
+              this.cityComponent = address;
+            }
           }
         });
       });
