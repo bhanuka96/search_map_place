@@ -175,7 +175,8 @@ class _SearchMapPlaceWidgetState extends State<SearchMapPlaceWidget> with Ticker
     return Center(
       child: Row(
         children: <Widget>[
-          Icon(Icons.location_on),
+          Icon(Icons.location_on,color: widget.iconColor),
+          Container(width: 5),
           Expanded(
             child: TextField(
               decoration: _inputStyle(),
