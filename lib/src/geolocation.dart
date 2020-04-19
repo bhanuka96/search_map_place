@@ -7,6 +7,15 @@ class Geolocation {
     this._coordinates = geolocationJSON["results"][0]["geometry"]["location"];
     this._bounds = geolocationJSON["results"][0]["geometry"]["viewport"];
     this.fullJSON = geolocationJSON["results"][0];
+    geolocationJSON['results'].forEach((value){
+      value['address_components'].forEach((address){
+        address['types'].forEach((type){
+          if(type == 'administrative_area_level_3'){
+            this.cityComponent =address;
+          }
+        });
+      });
+    });
   }
 
   /// Property that holds the JSON response that contains the location of the place.
@@ -22,6 +31,8 @@ class Geolocation {
   /// fullJSON["adress_components"][2]["short_name"]
   /// ```
   var fullJSON;
+
+  var cityComponent;
 
   /// If you have the `google_maps_flutter` package, this method will return the coordinates of the place as
   /// a `LatLng` object. Otherwise, it'll be returned as Map.
