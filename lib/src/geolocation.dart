@@ -10,6 +10,36 @@ class Geolocation {
     this._bounds = geolocationJSON["results"][0]["geometry"]["viewport"];
     this.fullJSON = geolocationJSON["results"][0];
 
+    this.cityComponent = findCity(geolocationJSON);
+//    for(String city in cities){
+//      for(var result in geolocationJSON['results']){
+//        for(var address in result['address_components']){
+//          for(var type in address['types']){
+//            if(city == type){
+//              this.cityComponent = address;
+//              break;
+//            }
+//          }
+//        }
+//      }
+//    }
+//    geolocationJSON['results'].forEach((value) {
+//      value['address_components'].forEach((address) {
+//        address['types'].forEach((type) {
+//          if (type == 'locality') {
+//            this.cityComponent = address;
+//            foundLocality = true;
+//          } else {
+//            if (type == 'administrative_area_level_3' && !foundLocality) {
+//              this.cityComponent = address;
+//            }
+//          }
+//        });
+//      });
+//    });
+  }
+
+  String findCity(var geolocationJSON){
     List<String> cities = [
       'sublocality_level_5',
       'sublocality_level_4',
@@ -28,27 +58,12 @@ class Geolocation {
         for(var address in result['address_components']){
           for(var type in address['types']){
             if(city == type){
-              this.cityComponent = address;
-              break;
+              return address;
             }
           }
         }
       }
     }
-//    geolocationJSON['results'].forEach((value) {
-//      value['address_components'].forEach((address) {
-//        address['types'].forEach((type) {
-//          if (type == 'locality') {
-//            this.cityComponent = address;
-//            foundLocality = true;
-//          } else {
-//            if (type == 'administrative_area_level_3' && !foundLocality) {
-//              this.cityComponent = address;
-//            }
-//          }
-//        });
-//      });
-//    });
   }
 
   /// Property that holds the JSON response that contains the location of the place.
