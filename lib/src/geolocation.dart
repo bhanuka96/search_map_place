@@ -2,40 +2,65 @@ part of search_map_place;
 
 class Geolocation {
   Geolocation(this._coordinates, this._bounds);
+  List<String> cities = [
+    'sublocality_level_5',
+    'sublocality_level_4',
+    'sublocality_level_3',
+    'sublocality_level_2',
+    'sublocality_level_1',
+    'locality',
+    'administrative_area_level_5',
+    'administrative_area_level_4',
+    'administrative_area_level_3',
+    'administrative_area_level_2',
+    'administrative_area_level_1'
+  ];
 
   Geolocation.fromJSON(geolocationJSON) {
     this._coordinates = geolocationJSON["results"][0]["geometry"]["location"];
     this._bounds = geolocationJSON["results"][0]["geometry"]["viewport"];
     this.fullJSON = geolocationJSON["results"][0];
-    this.cityComponent = findCity(geolocationJSON);
-  }
-
-  String findCity(var geolocationJSON){
-    List<String> cities = [
-      'sublocality_level_5',
-      'sublocality_level_4',
-      'sublocality_level_3',
-      'sublocality_level_2',
-      'sublocality_level_1',
-      'locality',
-      'administrative_area_level_5',
-      'administrative_area_level_4',
-      'administrative_area_level_3',
-      'administrative_area_level_2',
-      'administrative_area_level_1'
-    ];
-    for(String city in cities){
+//    this.cityComponent = findCity(geolocationJSON);
+    OUTER: for(String city in cities){
       for(var result in geolocationJSON['results']){
         for(var address in result['address_components']){
           for(var type in address['types']){
             if(city == type){
-              return address;
+              this.cityComponent = address;
+              break OUTER;
             }
           }
         }
       }
     }
   }
+
+//  dynamic findCity(var geolocationJSON){
+//    List<String> cities = [
+//      'sublocality_level_5',
+//      'sublocality_level_4',
+//      'sublocality_level_3',
+//      'sublocality_level_2',
+//      'sublocality_level_1',
+//      'locality',
+//      'administrative_area_level_5',
+//      'administrative_area_level_4',
+//      'administrative_area_level_3',
+//      'administrative_area_level_2',
+//      'administrative_area_level_1'
+//    ];
+//    for(String city in cities){
+//      for(var result in geolocationJSON['results']){
+//        for(var address in result['address_components']){
+//          for(var type in address['types']){
+//            if(city == type){
+//              return address;
+//            }
+//          }
+//        }
+//      }
+//    }
+//  }
 
   /// Property that holds the JSON response that contains the location of the place.
   var _coordinates;
