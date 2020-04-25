@@ -10,7 +10,7 @@ class Geolocation {
     this._bounds = geolocationJSON["results"][0]["geometry"]["viewport"];
     this.fullJSON = geolocationJSON["results"][0];
 
-    this.cityComponent = findCity(geolocationJSON);
+//    this.cityComponent = findCity(geolocationJSON);
     List<String> cities = [
       'sublocality_level_5',
       'sublocality_level_4',
@@ -28,7 +28,7 @@ class Geolocation {
       for(var result in geolocationJSON['results']){
         for(var address in result['address_components']){
           for(var type in address['types']){
-            if(city == type && !foundLocality){
+            if(city.toLowerCase() == type.toLowerCase() && !foundLocality){
               this.cityComponent = address;
               foundLocality = true;
             }
@@ -64,8 +64,8 @@ class Geolocation {
 //    });
   }
 
-  String findCity(var geolocationJSON){
-  }
+//  String findCity(var geolocationJSON){
+//  }
 
   /// Property that holds the JSON response that contains the location of the place.
   var _coordinates;
