@@ -2,26 +2,53 @@ part of search_map_place;
 
 class Geolocation {
   Geolocation(this._coordinates, this._bounds);
+
   bool foundLocality = false;
+
   Geolocation.fromJSON(geolocationJSON) {
     this._coordinates = geolocationJSON["results"][0]["geometry"]["location"];
     this._bounds = geolocationJSON["results"][0]["geometry"]["viewport"];
     this.fullJSON = geolocationJSON["results"][0];
 
-    geolocationJSON['results'].forEach((value){
-      value['address_components'].forEach((address){
-        address['types'].forEach((type){
-          if(type == 'locality'){
-            this.cityComponent = address;
-            foundLocality = true;
-          }else{
-            if(type == 'administrative_area_level_3' && !foundLocality){
+    List<String> cities = [
+      'sublocality_level_5',
+      'sublocality_level_4',
+      'sublocality_level_3',
+      'sublocality_level_2',
+      'sublocality_level_1',
+      'locality',
+      'administrative_area_level_5',
+      'administrative_area_level_4',
+      'administrative_area_level_3',
+      'administrative_area_level_2',
+      'administrative_area_level_1'
+    ];
+    for(String city in cities){
+      for(var result in geolocationJSON['results']){
+        for(var address in result['address_components']){
+          for(var type in address['types']){
+            if(city == type){
               this.cityComponent = address;
+              break;
             }
           }
-        });
-      });
-    });
+        }
+      }
+    }
+//    geolocationJSON['results'].forEach((value) {
+//      value['address_components'].forEach((address) {
+//        address['types'].forEach((type) {
+//          if (type == 'locality') {
+//            this.cityComponent = address;
+//            foundLocality = true;
+//          } else {
+//            if (type == 'administrative_area_level_3' && !foundLocality) {
+//              this.cityComponent = address;
+//            }
+//          }
+//        });
+//      });
+//    });
   }
 
   /// Property that holds the JSON response that contains the location of the place.
