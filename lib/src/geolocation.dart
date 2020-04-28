@@ -33,6 +33,16 @@ class Geolocation {
         }
       }
     }
+    OUTER: for(var result in geolocationJSON['results']){
+      for(var address in result['address_components']){
+        for(var type in address['types']){
+          if('lk' == type.toLowerCase()){
+            this.countryComponent = address;
+            break OUTER;
+          }
+        }
+      }
+    }
   }
 
 //  dynamic findCity(var geolocationJSON){
@@ -77,6 +87,8 @@ class Geolocation {
   var fullJSON;
 
   var cityComponent;
+
+  var countryComponent;
 
   /// If you have the `google_maps_flutter` package, this method will return the coordinates of the place as
   /// a `LatLng` object. Otherwise, it'll be returned as Map.
