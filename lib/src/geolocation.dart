@@ -36,7 +36,7 @@ class Geolocation {
     OUTER: for(var result in geolocationJSON['results']){
       for(var address in result['address_components']){
         for(var type in address['types']){
-          if('lk' == type.toLowerCase()){
+          if('country' == type){
             this.countryComponent = address;
             break OUTER;
           }
