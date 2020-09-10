@@ -73,7 +73,7 @@ class SearchMapPlaceWidget extends StatefulWidget {
 
   /// Enables Dark Mode when set to `true`. Default value is `false`.
   final bool darkMode;
-  
+
   final TextEditingController textEditingController;
   final bool boxSearch;
 
@@ -84,8 +84,10 @@ class SearchMapPlaceWidget extends StatefulWidget {
 class _SearchMapPlaceWidgetState extends State<SearchMapPlaceWidget> with TickerProviderStateMixin {
 //  TextEditingController widget.textEditingController = TextEditingController();
   AnimationController _animationController;
+
   // SearchContainer height.
   Animation _containerHeight;
+
   // Place options opacity.
   Animation _listOpacity;
 
@@ -137,12 +139,15 @@ class _SearchMapPlaceWidgetState extends State<SearchMapPlaceWidget> with Ticker
   }
 
   @override
-  Widget build(BuildContext context) => Container(
-        width: MediaQuery.of(context).size.width * 0.9,
-        child: _searchContainer(
-          child:widget.boxSearch?_searchInput2(context): _searchInput(context),
-        ),
-      );
+  Widget build(BuildContext context) {
+    print('status is ${_animationController.status}');
+   return Container(
+     width: MediaQuery.of(context).size.width * 0.9,
+     child: _searchContainer(
+       child: widget.boxSearch ? _searchInput2(context) : _searchInput(context),
+     ),
+   );
+  }
 
   /*
   WIDGETS
@@ -153,23 +158,22 @@ class _SearchMapPlaceWidgetState extends State<SearchMapPlaceWidget> with Ticker
         builder: (context, _) {
           return Container(
             height: _containerHeight.value,
-            decoration:widget.boxSearch?null: _containerDecoration(),
+            decoration: widget.boxSearch ? null : _containerDecoration(),
             child: Column(
               children: <Widget>[
-                if(widget.boxSearch)
+                if (widget.boxSearch)
                   child
                 else
-                Padding(
-                  padding: const EdgeInsets.only(left: 12.0, right: 12.0, top: 4),
-                  child: child,
-                ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 12.0, right: 12.0, top: 4),
+                    child: child,
+                  ),
                 if (_placePredictions.length > 0)
                   Opacity(
                     opacity: _listOpacity.value,
                     child: Column(
                       children: <Widget>[
-                        for (var prediction in _placePredictions)
-                          _placeOption(Place.fromJSON(prediction, geocode)),
+                        for (var prediction in _placePredictions) _placeOption(Place.fromJSON(prediction, geocode)),
                       ],
                     ),
                   ),
@@ -179,29 +183,28 @@ class _SearchMapPlaceWidgetState extends State<SearchMapPlaceWidget> with Ticker
         });
   }
 
-  Widget _searchInput2(BuildContext context){
+  Widget _searchInput2(BuildContext context) {
     return TextFormField(
-      controller: widget.textEditingController,
-     // validator: validateCity,
-      decoration: InputDecoration(
-        contentPadding: EdgeInsets.fromLTRB(0.0, 10.0, 20.0, 0.0),
-        fillColor: Colors.white,
-        hintText: 'City Name',
-        alignLabelWithHint: true,
-        filled: true,
-      ),
-      onFieldSubmitted: (_) => _selectPlace(),
-      onEditingComplete: _selectPlace,
-      autofocus: false,
-      focusNode: _fn
-    );
+        controller: widget.textEditingController,
+        // validator: validateCity,
+        decoration: InputDecoration(
+          contentPadding: EdgeInsets.fromLTRB(0.0, 10.0, 20.0, 0.0),
+          fillColor: Colors.white,
+          hintText: 'City Name',
+          alignLabelWithHint: true,
+          filled: true,
+        ),
+        onFieldSubmitted: (_) => _selectPlace(),
+        onEditingComplete: _selectPlace,
+        autofocus: false,
+        focusNode: _fn);
   }
 
   Widget _searchInput(BuildContext context) {
     return Center(
       child: Row(
         children: <Widget>[
-          Icon(Icons.location_on,color: widget.iconColor),
+          Icon(Icons.location_on, color: widget.iconColor),
           Container(width: 5),
           Expanded(
             child: TextField(
@@ -322,8 +325,7 @@ class _SearchMapPlaceWidgetState extends State<SearchMapPlaceWidget> with Ticker
 
   /// API request function. Returns the Predictions
   Future<dynamic> _makeRequest(input) async {
-    String url =
-        "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$input&key=${widget.apiKey}&language=${widget.language}&components=country:lk";
+    String url = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$input&key=${widget.apiKey}&language=${widget.language}&components=country:lk";
     if (widget.location != null && widget.radius != null) {
       url += "&location=${widget.location.latitude},${widget.location.longitude}&radius=${widget.radius}";
       if (widget.strictBounds) {
@@ -339,8 +341,7 @@ class _SearchMapPlaceWidgetState extends State<SearchMapPlaceWidget> with Ticker
 
     if (json["error_message"] != null) {
       var error = json["error_message"];
-      if (error == "This API project is not authorized to use this API.")
-        error += " Make sure the Places API is activated on your Google Cloud Platform";
+      if (error == "This API project is not authorized to use this API.") error += " Make sure the Places API is activated on your Google Cloud Platform";
       throw Exception(error);
     } else {
       final predictions = json["predictions"];
@@ -383,7 +384,7 @@ class _SearchMapPlaceWidgetState extends State<SearchMapPlaceWidget> with Ticker
   /// Will listen for input changes every 0.5 seconds, allowing us to make API requests only when the user stops typing.
   void customListener() {
     Future.delayed(Duration(milliseconds: 500), () {
-      if(!mounted) return;
+      if (!mounted) return;
       setState(() => _tempInput = widget.textEditingController.text);
       customListener();
     });
