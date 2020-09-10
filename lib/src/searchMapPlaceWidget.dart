@@ -156,6 +156,9 @@ class _SearchMapPlaceWidgetState extends State<SearchMapPlaceWidget> with Ticker
             decoration:widget.boxSearch?null: _containerDecoration(),
             child: Column(
               children: <Widget>[
+                if(widget.boxSearch)
+                  child
+                else
                 Padding(
                   padding: const EdgeInsets.only(left: 12.0, right: 12.0, top: 4),
                   child: child,
