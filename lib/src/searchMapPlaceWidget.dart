@@ -153,7 +153,7 @@ class _SearchMapPlaceWidgetState extends State<SearchMapPlaceWidget> with Ticker
         builder: (context, _) {
           return Container(
             height: _containerHeight.value,
-            decoration: _containerDecoration(),
+            decoration:widget.boxSearch?null: _containerDecoration(),
             child: Column(
               children: <Widget>[
                 Padding(
