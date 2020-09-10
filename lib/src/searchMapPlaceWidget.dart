@@ -140,12 +140,12 @@ class _SearchMapPlaceWidgetState extends State<SearchMapPlaceWidget> with Ticker
 
   @override
   Widget build(BuildContext context) {
-   return Container(
-     width: MediaQuery.of(context).size.width * 0.9,
-     child: _searchContainer(
-       child: widget.boxSearch ? _searchInput2(context) : _searchInput(context),
-     ),
-   );
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.9,
+      child: _searchContainer(
+        child: widget.boxSearch ? _searchInput2(context) : _searchInput(context),
+      ),
+    );
   }
 
   /*
@@ -157,7 +157,7 @@ class _SearchMapPlaceWidgetState extends State<SearchMapPlaceWidget> with Ticker
         builder: (context, _) {
           return Container(
             height: _containerHeight.value,
-            decoration:_animationController.status == AnimationStatus.dismissed ? null : _containerDecoration(),
+            decoration: widget.boxSearch ? (_animationController.status == AnimationStatus.dismissed ? null : _containerDecoration()) : _containerDecoration(),
             child: Column(
               children: <Widget>[
                 if (widget.boxSearch)
