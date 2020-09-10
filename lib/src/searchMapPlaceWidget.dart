@@ -17,6 +17,7 @@ class SearchMapPlaceWidget extends StatefulWidget {
     this.strictBounds = false,
     this.placeType,
     this.darkMode = false,
+    this.boxSearch = false,
     this.key,
   })  : assert((location == null && radius == null) || (location != null && radius != null)),
         super(key: key);
@@ -74,6 +75,7 @@ class SearchMapPlaceWidget extends StatefulWidget {
   final bool darkMode;
   
   final TextEditingController textEditingController;
+  final boxSearch;
 
   @override
   _SearchMapPlaceWidgetState createState() => _SearchMapPlaceWidgetState();
@@ -138,7 +140,7 @@ class _SearchMapPlaceWidgetState extends State<SearchMapPlaceWidget> with Ticker
   Widget build(BuildContext context) => Container(
         width: MediaQuery.of(context).size.width * 0.9,
         child: _searchContainer(
-          child: _searchInput(context),
+          child:widget.boxSearch?_searchInput2(context): _searchInput(context),
         ),
       );
 
@@ -172,6 +174,21 @@ class _SearchMapPlaceWidgetState extends State<SearchMapPlaceWidget> with Ticker
             ),
           );
         });
+  }
+
+  Widget _searchInput2(BuildContext context){
+    return TextFormField(
+      controller: widget.textEditingController,
+     // validator: validateCity,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.fromLTRB(0.0, 10.0, 20.0, 0.0),
+        fillColor: Colors.white,
+        hintText: 'City Name',
+        alignLabelWithHint: true,
+        filled: true,
+      ),
+      readOnly: true,
+    );
   }
 
   Widget _searchInput(BuildContext context) {

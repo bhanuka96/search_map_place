@@ -2,6 +2,7 @@ part of search_map_place;
 
 class Geolocation {
   Geolocation(this._coordinates, this._bounds);
+
   List<String> cities = [
     'sublocality_level_5',
     'sublocality_level_4',
@@ -21,11 +22,12 @@ class Geolocation {
     this._bounds = geolocationJSON["results"][0]["geometry"]["viewport"];
     this.fullJSON = geolocationJSON["results"][0];
 //    this.cityComponent = findCity(geolocationJSON);
-    OUTER: for(String city in cities){
-      for(var result in geolocationJSON['results']){
-        for(var address in result['address_components']){
-          for(var type in address['types']){
-            if(city == type){
+    OUTER:
+    for (String city in cities) {
+      for (var result in geolocationJSON['results']) {
+        for (var address in result['address_components']) {
+          for (var type in address['types']) {
+            if (city == type) {
               this.cityComponent = address;
               break OUTER;
             }
@@ -33,10 +35,11 @@ class Geolocation {
         }
       }
     }
-    OUTER: for(var result in geolocationJSON['results']){
-      for(var address in result['address_components']){
-        for(var type in address['types']){
-          if('country' == type){
+    OUTER:
+    for (var result in geolocationJSON['results']) {
+      for (var address in result['address_components']) {
+        for (var type in address['types']) {
+          if ('country' == type) {
             this.countryComponent = address;
             break OUTER;
           }
@@ -96,8 +99,7 @@ class Geolocation {
     try {
       return LatLng(_coordinates["lat"], _coordinates["lng"]);
     } catch (e) {
-      print(
-          "You appear to not have the `google_maps_flutter` package installed. In this case, this method will return an object with the latitude and longitude");
+      print("You appear to not have the `google_maps_flutter` package installed. In this case, this method will return an object with the latitude and longitude");
       return _coordinates;
     }
   }
@@ -107,14 +109,11 @@ class Geolocation {
   get bounds {
     try {
       return LatLngBounds(
-        southwest:
-            LatLng(_bounds["southwest"]["lat"], _bounds["southwest"]["lng"]),
-        northeast:
-            LatLng(_bounds["northeast"]["lat"], _bounds["northeast"]["lng"]),
+        southwest: LatLng(_bounds["southwest"]["lat"], _bounds["southwest"]["lng"]),
+        northeast: LatLng(_bounds["northeast"]["lat"], _bounds["northeast"]["lng"]),
       );
     } catch (e) {
-      print(
-          "You appear to not have the `google_maps_flutter` package installed. In this case, this method will return an object with southwest and northeast bounds");
+      print("You appear to not have the `google_maps_flutter` package installed. In this case, this method will return an object with southwest and northeast bounds");
       return _bounds;
     }
   }
