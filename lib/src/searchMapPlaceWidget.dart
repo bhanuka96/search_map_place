@@ -75,7 +75,7 @@ class SearchMapPlaceWidget extends StatefulWidget {
   final bool darkMode;
   
   final TextEditingController textEditingController;
-  final boxSearch;
+  final bool boxSearch;
 
   @override
   _SearchMapPlaceWidgetState createState() => _SearchMapPlaceWidgetState();
