@@ -140,7 +140,6 @@ class _SearchMapPlaceWidgetState extends State<SearchMapPlaceWidget> with Ticker
 
   @override
   Widget build(BuildContext context) {
-    print('status is ${_animationController.status}');
    return Container(
      width: MediaQuery.of(context).size.width * 0.9,
      child: _searchContainer(
@@ -158,7 +157,7 @@ class _SearchMapPlaceWidgetState extends State<SearchMapPlaceWidget> with Ticker
         builder: (context, _) {
           return Container(
             height: _containerHeight.value,
-            decoration: widget.boxSearch ? null : _containerDecoration(),
+            decoration:_animationController.status == AnimationStatus.dismissed ? null : _containerDecoration(),
             child: Column(
               children: <Widget>[
                 if (widget.boxSearch)
