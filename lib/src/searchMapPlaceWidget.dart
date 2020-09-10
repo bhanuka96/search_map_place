@@ -190,7 +190,10 @@ class _SearchMapPlaceWidgetState extends State<SearchMapPlaceWidget> with Ticker
         alignLabelWithHint: true,
         filled: true,
       ),
-      readOnly: true,
+      onFieldSubmitted: (_) => _selectPlace(),
+      onEditingComplete: _selectPlace,
+      autofocus: false,
+      focusNode: _fn
     );
   }
 
